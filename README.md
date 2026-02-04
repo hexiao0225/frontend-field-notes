@@ -2,6 +2,10 @@
 
 A hands-on playground for practicing modern React composition and accessibility patterns by building 6 reusable UI primitives from scratch.
 
+**[🚀 Live Demo](https://component-playground-xi.vercel.app)**
+
+![Component Playground Hero](public/screenshots/hero.png)
+
 ## Goal
 
 Build production-quality, accessible UI components without reaching for external libraries—understanding the patterns deeply enough to implement them yourself.
@@ -18,6 +22,67 @@ Build production-quality, accessible UI components without reaching for external
 | **Modal** | Compound + Portal | Focus trap, body scroll lock, Escape to close, aria-modal |
 | **Toast** | Context + Queue | Auto-dismiss, hover pause, max 3 visible, aria-live announcements |
 | **Form** | Context + Validation | Blur + submit validation, aria-invalid, built-in validators |
+
+### Component Demos
+
+<table>
+<tr>
+<td width="50%">
+
+**Skeleton Loader**
+
+![Skeleton Demo](public/screenshots/skeleton.png)
+
+</td>
+<td width="50%">
+
+**Tabs**
+
+![Tabs Demo](public/screenshots/tabs.png)
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Dropdown Menu**
+
+![Dropdown Demo](public/screenshots/dropdown.png)
+
+</td>
+<td width="50%">
+
+**Modal Dialog**
+
+![Modal Demo](public/screenshots/modal.png)
+
+</td>
+</tr>
+<tr>
+<td width="50%">
+
+**Toast Notifications**
+
+![Toast Demo](public/screenshots/toast.png)
+
+</td>
+<td width="50%">
+
+**Form Validation**
+
+![Form Demo](public/screenshots/form.png)
+
+</td>
+</tr>
+</table>
+
+**Modal with Focus Trap**
+
+![Modal Open](public/screenshots/modal-open.png)
+
+**Stacked Toast Notifications**
+
+![Toasts Stacked](public/screenshots/toasts.png)
 
 ### 4 Custom Hooks
 
@@ -107,3 +172,7 @@ component-playground/
 - [x] Screen reader announcements for toasts
 - [x] Reduced motion support
 - [x] Form validation announced to screen readers
+
+---
+
+Part of [frontend-field-notes](https://github.com/hexiao0225/frontend-field-notes) — frontend experiments and learning projects.
