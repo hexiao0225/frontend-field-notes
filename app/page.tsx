@@ -8,6 +8,7 @@ import {
   ModalDemo,
   ToastDemo,
   FormDemo,
+  PatternsSection,
 } from "@/components/playground";
 
 export default function PlaygroundPage() {
@@ -28,31 +29,8 @@ export default function PlaygroundPage() {
 
         {/* Main content */}
         <main className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8">
-          {/* Patterns overview */}
-          <section className="mb-8 p-4 bg-white rounded-lg border border-gray-200">
-            <h2 className="text-sm font-semibold text-gray-900 mb-3">
-              Patterns Used
-            </h2>
-            <div className="flex flex-wrap gap-2">
-              {[
-                "Compound Components",
-                "Context for State",
-                "Controlled/Uncontrolled",
-                "Custom Hooks",
-                "Portal Rendering",
-                "Focus Management",
-                "ARIA Attributes",
-                "Reduced Motion",
-              ].map((pattern) => (
-                <span
-                  key={pattern}
-                  className="px-2 py-1 text-xs font-medium bg-blue-50 text-blue-700 rounded-full"
-                >
-                  {pattern}
-                </span>
-              ))}
-            </div>
-          </section>
+          {/* Patterns overview - interactive! */}
+          <PatternsSection />
 
           {/* Component demos grid */}
           <div className="grid grid-cols-1 lg:grid-cols-2 gap-6">
