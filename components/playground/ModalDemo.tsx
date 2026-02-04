@@ -4,6 +4,110 @@ import { useState } from "react";
 import { Modal } from "@/components/ui";
 import { DemoCard } from "./DemoCard";
 
+const modalSource = `// components/ui/Modal.tsx - Key parts
+import { createPortal } from "react-dom";
+import { useFocusTrap } from "@/hooks";
+
+const ModalContext = createContext<ModalContextValue | null>(null);
+
+function Modal({ open, defaultOpen, onOpenChange, children }) {
+  const [isOpen, setIsOpen] = useControllable({
+    value: open,
+    defaultValue: defaultOpen,
+    onChange: onOpenChange,
+  });
+
+  return (
+    <ModalContext.Provider value={{ isOpen, setIsOpen, titleId, descId }}>
+      {children}
+    </ModalContext.Provider>
+  );
+}
+
+function ModalContent({ children }) {
+  const { isOpen, setIsOpen, titleId, descriptionId } = useModalContext();
+
+  // Focus trap - keeps Tab cycling within modal
+  const focusTrapRef = useFocusTrap(isOpen);
+
+  // Close on Escape
+  useEffect(() => {
+    if (!isOpen) return;
+    const handleKeyDown = (e) => {
+      if (e.key === "Escape") setIsOpen(false);
+    };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
+
+  // Prevent body scroll when open
+  useEffect(() => {
+    if (isOpen) {
+      document.body.style.overflow = "hidden";
+      return () => { document.body.style.overflow = ""; };
+    }
+  }, [isOpen]);
+
+  if (!isOpen) return null;
+
+  // Portal renders at document.body to escape parent CSS
+  return createPortal(
+    <>
+      {/* Overlay - click to close */}
+      <div
+        className="fixed inset-0 bg-black/50"
+        onClick={() => setIsOpen(false)}
+        aria-hidden="true"
+      />
+      {/* Dialog */}
+      <div
+        ref={focusTrapRef}
+        role="dialog"
+        aria-modal="true"
+        aria-labelledby={titleId}
+        aria-describedby={descriptionId}
+        className="fixed left-1/2 top-1/2 -translate-x-1/2 -translate-y-1/2"
+      >
+        {children}
+      </div>
+    </>,
+    document.body
+  );
+}
+
+// hooks/useFocusTrap.ts
+function useFocusTrap(enabled) {
+  const containerRef = useRef(null);
+  const previousActiveElement = useRef(null);
+
+  useEffect(() => {
+    if (!enabled) return;
+    previousActiveElement.current = document.activeElement;
+
+    const handleKeyDown = (e) => {
+      if (e.key !== "Tab") return;
+      const focusables = containerRef.current.querySelectorAll(FOCUSABLE);
+      const first = focusables[0], last = focusables[focusables.length - 1];
+
+      if (e.shiftKey && document.activeElement === first) {
+        e.preventDefault();
+        last.focus();
+      } else if (!e.shiftKey && document.activeElement === last) {
+        e.preventDefault();
+        first.focus();
+      }
+    };
+
+    document.addEventListener("keydown", handleKeyDown);
+    return () => {
+      document.removeEventListener("keydown", handleKeyDown);
+      previousActiveElement.current?.focus(); // Restore focus
+    };
+  }, [enabled]);
+
+  return containerRef;
+}`;
+
 export function ModalDemo() {
   const [isConfirmOpen, setIsConfirmOpen] = useState(false);
   const [result, setResult] = useState<string | null>(null);
@@ -12,6 +116,7 @@ export function ModalDemo() {
     <DemoCard
       title="Modal"
       description="Dialog with focus trap, Escape key handling, and proper ARIA. Focus is trapped and restored on close."
+      sourceFiles={[{ filename: "components/ui/Modal.tsx", code: modalSource }]}
     >
       <div className="space-y-6">
         {/* Basic modal */}

@@ -3,6 +3,107 @@
 import { useToastActions } from "@/components/ui";
 import { DemoCard } from "./DemoCard";
 
+const toastSource = `// components/ui/Toast.tsx - Key parts
+import { createPortal } from "react-dom";
+
+const ToastContext = createContext<ToastContextValue | null>(null);
+
+function ToastProvider({ children, position = "bottom-right", maxToasts = 3 }) {
+  const [toasts, setToasts] = useState<Toast[]>([]);
+
+  const addToast = useCallback((options) => {
+    const id = generateUniqueId();
+    const toast = { ...options, id, duration: options.duration ?? 5000 };
+
+    setToasts((prev) => {
+      // Remove oldest if at max capacity (FIFO)
+      const updated = prev.length >= maxToasts ? prev.slice(1) : prev;
+      return [...updated, toast];
+    });
+
+    return id;
+  }, [maxToasts]);
+
+  const removeToast = useCallback((id) => {
+    setToasts((prev) => prev.filter((t) => t.id !== id));
+  }, []);
+
+  return (
+    <ToastContext.Provider value={{ toasts, addToast, removeToast, position }}>
+      {children}
+      <ToastContainer />
+    </ToastContext.Provider>
+  );
+}
+
+function ToastContainer() {
+  const { toasts, position } = useToast();
+
+  return createPortal(
+    <div className={\`fixed \${positionClasses[position]} z-50\`}>
+      {/* Screen reader live region */}
+      <div className="sr-only" role="status" aria-live="polite">
+        {toasts[toasts.length - 1]?.title}
+      </div>
+      {toasts.map((toast) => (
+        <ToastItem key={toast.id} toast={toast} />
+      ))}
+    </div>,
+    document.body
+  );
+}
+
+function ToastItem({ toast }) {
+  const { removeToast } = useToast();
+  const prefersReducedMotion = useReducedMotion();
+  const timerRef = useRef();
+
+  // Auto-dismiss
+  useEffect(() => {
+    if (toast.duration > 0) {
+      timerRef.current = setTimeout(() => removeToast(toast.id), toast.duration);
+      return () => clearTimeout(timerRef.current);
+    }
+  }, [toast.duration, toast.id]);
+
+  // Pause on hover
+  const handleMouseEnter = () => clearTimeout(timerRef.current);
+  const handleMouseLeave = () => {
+    if (toast.duration > 0) {
+      timerRef.current = setTimeout(() => removeToast(toast.id), 1000);
+    }
+  };
+
+  return (
+    <div
+      role="alert"
+      onMouseEnter={handleMouseEnter}
+      onMouseLeave={handleMouseLeave}
+      className={cn(
+        "p-4 rounded-lg shadow-lg",
+        !prefersReducedMotion && "animate-slide-in"
+      )}
+    >
+      <span>{toast.title}</span>
+      {toast.description && <p>{toast.description}</p>}
+      <button onClick={() => removeToast(toast.id)} aria-label="Dismiss">
+        ✕
+      </button>
+    </div>
+  );
+}
+
+// Convenience hook
+function useToastActions() {
+  const { addToast } = useToast();
+  return {
+    info: (title, description) => addToast({ type: "info", title, description }),
+    success: (title, description) => addToast({ type: "success", title, description }),
+    warning: (title, description) => addToast({ type: "warning", title, description }),
+    error: (title, description) => addToast({ type: "error", title, description }),
+  };
+}`;
+
 export function ToastDemo() {
   const toast = useToastActions();
 
@@ -10,6 +111,7 @@ export function ToastDemo() {
     <DemoCard
       title="Toast"
       description="Notification system with queue management. Max 3 visible, auto-dismiss, and accessible announcements."
+      sourceFiles={[{ filename: "components/ui/Toast.tsx", code: toastSource }]}
     >
       <div className="space-y-6">
         {/* Toast types */}

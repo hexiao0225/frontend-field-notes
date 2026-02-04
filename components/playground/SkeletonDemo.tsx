@@ -4,6 +4,74 @@ import { useState } from "react";
 import { Skeleton } from "@/components/ui";
 import { DemoCard } from "./DemoCard";
 
+const skeletonSource = `// components/ui/Skeleton.tsx
+import { cn } from "@/lib/cn";
+import { useReducedMotion } from "@/hooks";
+
+type SkeletonProps = {
+  className?: string;
+  width?: string | number;
+  height?: string | number;
+};
+
+function Skeleton({ className, width, height }: SkeletonProps) {
+  const prefersReducedMotion = useReducedMotion();
+
+  return (
+    <div
+      aria-hidden="true"
+      className={cn(
+        "bg-gray-200 rounded",
+        !prefersReducedMotion && "animate-pulse",
+        className
+      )}
+      style={{
+        width: typeof width === "number" ? \`\${width}px\` : width,
+        height: typeof height === "number" ? \`\${height}px\` : height,
+      }}
+    />
+  );
+}
+
+// Compound components for common patterns
+function SkeletonText({ lines = 3, lastLineWidth = "60%" }) {
+  return (
+    <div className="space-y-2" aria-hidden="true">
+      {Array.from({ length: lines }).map((_, i) => (
+        <Skeleton
+          key={i}
+          height={16}
+          width={i === lines - 1 ? lastLineWidth : "100%"}
+        />
+      ))}
+    </div>
+  );
+}
+
+function SkeletonCircle({ size = 40 }) {
+  return <Skeleton width={size} height={size} className="rounded-full" />;
+}
+
+function SkeletonCard({ hasAvatar = true, lines = 2 }) {
+  return (
+    <div className="flex items-start gap-3 p-4" aria-hidden="true">
+      {hasAvatar && <SkeletonCircle size={40} />}
+      <div className="flex-1 space-y-2">
+        <Skeleton height={16} className="w-3/4" />
+        {Array.from({ length: lines - 1 }).map((_, i) => (
+          <Skeleton key={i} height={14} className="w-1/2" />
+        ))}
+      </div>
+    </div>
+  );
+}
+
+export const Skeleton = Object.assign(SkeletonBase, {
+  Text: SkeletonText,
+  Circle: SkeletonCircle,
+  Card: SkeletonCard,
+});`;
+
 export function SkeletonDemo() {
   const [isLoading, setIsLoading] = useState(true);
 
@@ -11,6 +79,7 @@ export function SkeletonDemo() {
     <DemoCard
       title="Skeleton"
       description="Loading placeholders with pulse animation. Respects reduced motion preferences."
+      sourceFiles={[{ filename: "components/ui/Skeleton.tsx", code: skeletonSource }]}
     >
       <div className="space-y-6">
         {/* Toggle */}

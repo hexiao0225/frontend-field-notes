@@ -4,6 +4,82 @@ import { useState } from "react";
 import { Tabs } from "@/components/ui";
 import { DemoCard } from "./DemoCard";
 
+const tabsSource = `// components/ui/Tabs.tsx - Key parts
+const TabsContext = createContext<TabsContextValue | null>(null);
+
+function Tabs({ value, defaultValue, onValueChange, children }) {
+  const [activeTab, setActiveTab] = useControllable({
+    value,
+    defaultValue,
+    onChange: onValueChange,
+  });
+
+  return (
+    <TabsContext.Provider value={{ activeTab, setActiveTab, ... }}>
+      {children}
+    </TabsContext.Provider>
+  );
+}
+
+function TabsList({ children }) {
+  const { tabs, setActiveTab, activeTab } = useTabsContext();
+
+  const handleKeyDown = (event) => {
+    switch (event.key) {
+      case "ArrowLeft":
+        // Move to previous tab (wrap around)
+        nextIndex = currentIndex > 0 ? currentIndex - 1 : tabs.length - 1;
+        break;
+      case "ArrowRight":
+        // Move to next tab (wrap around)
+        nextIndex = currentIndex < tabs.length - 1 ? currentIndex + 1 : 0;
+        break;
+      case "Home":
+        nextIndex = 0;
+        break;
+      case "End":
+        nextIndex = tabs.length - 1;
+        break;
+    }
+    setActiveTab(tabs[nextIndex]);
+    tabElements[nextIndex].focus(); // Move focus with selection
+  };
+
+  return (
+    <div role="tablist" onKeyDown={handleKeyDown}>
+      {children}
+    </div>
+  );
+}
+
+function Tab({ value, children }) {
+  const { activeTab, setActiveTab } = useTabsContext();
+  const isActive = activeTab === value;
+
+  return (
+    <button
+      role="tab"
+      aria-selected={isActive}
+      aria-controls={\`panel-\${value}\`}
+      tabIndex={isActive ? 0 : -1}  // Roving tabindex
+      onClick={() => setActiveTab(value)}
+    >
+      {children}
+    </button>
+  );
+}
+
+function TabPanel({ value, children }) {
+  const { activeTab } = useTabsContext();
+  if (activeTab !== value) return null;
+
+  return (
+    <div role="tabpanel" aria-labelledby={\`tab-\${value}\`} tabIndex={0}>
+      {children}
+    </div>
+  );
+}`;
+
 export function TabsDemo() {
   const [controlledTab, setControlledTab] = useState("overview");
 
@@ -11,6 +87,7 @@ export function TabsDemo() {
     <DemoCard
       title="Tabs"
       description="Keyboard-navigable tabs with roving tabindex. Use Arrow keys, Home, and End."
+      sourceFiles={[{ filename: "components/ui/Tabs.tsx", code: tabsSource }]}
     >
       <div className="space-y-8">
         {/* Uncontrolled example */}

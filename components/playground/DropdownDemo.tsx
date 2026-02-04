@@ -4,6 +4,91 @@ import { useState } from "react";
 import { Dropdown } from "@/components/ui";
 import { DemoCard } from "./DemoCard";
 
+const dropdownSource = `// components/ui/Dropdown.tsx - Key parts
+const DropdownContext = createContext<DropdownContextValue | null>(null);
+
+function Dropdown({ children }) {
+  const [isOpen, setIsOpen] = useState(false);
+  const [activeIndex, setActiveIndex] = useState(-1);
+
+  // Close on click outside
+  const containerRef = useClickOutside(() => setIsOpen(false), isOpen);
+
+  return (
+    <DropdownContext.Provider value={{ isOpen, setIsOpen, activeIndex, ... }}>
+      <div ref={containerRef} className="relative inline-block">
+        {children}
+      </div>
+    </DropdownContext.Provider>
+  );
+}
+
+function DropdownTrigger({ children }) {
+  const { isOpen, setIsOpen } = useDropdownContext();
+
+  return (
+    <button
+      aria-haspopup="menu"
+      aria-expanded={isOpen}
+      onClick={() => setIsOpen(!isOpen)}
+    >
+      {children}
+    </button>
+  );
+}
+
+function DropdownMenu({ children }) {
+  const { isOpen, activeIndex, setActiveIndex, items } = useDropdownContext();
+
+  const handleKeyDown = (event) => {
+    switch (event.key) {
+      case "ArrowDown":
+        setActiveIndex(activeIndex < items.length - 1 ? activeIndex + 1 : 0);
+        break;
+      case "ArrowUp":
+        setActiveIndex(activeIndex > 0 ? activeIndex - 1 : items.length - 1);
+        break;
+      case "Escape":
+        setIsOpen(false);
+        triggerRef.current?.focus(); // Return focus to trigger
+        break;
+      default:
+        // Typeahead: jump to matching item
+        if (event.key.length === 1) {
+          searchString += event.key;
+          const match = items.findIndex(i =>
+            i.toLowerCase().startsWith(searchString)
+          );
+          if (match !== -1) setActiveIndex(match);
+        }
+    }
+  };
+
+  if (!isOpen) return null;
+
+  return (
+    <div role="menu" onKeyDown={handleKeyDown}>
+      {children}
+    </div>
+  );
+}
+
+function DropdownItem({ children, onClick }) {
+  const { activeIndex, setActiveIndex } = useDropdownContext();
+  const isActive = activeIndex === itemIndex;
+
+  return (
+    <button
+      role="menuitem"
+      tabIndex={isActive ? 0 : -1}
+      onMouseEnter={() => setActiveIndex(itemIndex)}
+      onClick={onClick}
+    >
+      {children}
+    </button>
+  );
+}`;
+
 export function DropdownDemo() {
   const [selected, setSelected] = useState<string | null>(null);
 
@@ -15,6 +100,7 @@ export function DropdownDemo() {
     <DemoCard
       title="Dropdown"
       description="Menu with click-outside, keyboard navigation, and typeahead. Try Arrow keys and typing to search."
+      sourceFiles={[{ filename: "components/ui/Dropdown.tsx", code: dropdownSource }]}
     >
       <div className="space-y-6">
         {/* Basic dropdown */}

@@ -1,7 +1,7 @@
 "use client";
 
 import { useState } from "react";
-import { Modal } from "@/components/ui";
+import { Modal, CodeBlock } from "@/components/ui";
 
 type Pattern = {
   name: string;
@@ -383,15 +383,17 @@ export function PatternsSection() {
 
             {/* Code example */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-1">
+              <h3 className="text-sm font-semibold text-gray-900 mb-2">
                 Example from this project
               </h3>
-              <p className="text-xs text-gray-500 mb-2">
-                {selectedPattern?.example.file}
-              </p>
-              <pre className="p-3 bg-gray-900 text-gray-100 rounded-lg text-xs overflow-x-auto">
-                <code>{selectedPattern?.example.code}</code>
-              </pre>
+              {selectedPattern && (
+                <CodeBlock
+                  code={selectedPattern.example.code}
+                  filename={selectedPattern.example.file}
+                  language="tsx"
+                  maxHeight="300px"
+                />
+              )}
             </div>
           </div>
 

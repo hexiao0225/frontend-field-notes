@@ -4,6 +4,103 @@ import { useState } from "react";
 import { Form, validators } from "@/components/ui";
 import { DemoCard } from "./DemoCard";
 
+const formSource = `// components/ui/Form.tsx - Key parts
+const FormContext = createContext<FormContextValue | null>(null);
+
+// Built-in validators
+export const validators = {
+  required: (message = "Required") => ({
+    validate: (value) => value.trim().length > 0,
+    message,
+  }),
+  email: (message = "Invalid email") => ({
+    validate: (value) => /^[^\\s@]+@[^\\s@]+\\.[^\\s@]+$/.test(value),
+    message,
+  }),
+  minLength: (length, message) => ({
+    validate: (value) => value.length >= length,
+    message: message || \`Min \${length} characters\`,
+  }),
+  pattern: (regex, message) => ({
+    validate: (value) => regex.test(value),
+    message,
+  }),
+};
+
+function Form({ children, onSubmit }) {
+  const [values, setValues] = useState({});
+  const [rules, setRules] = useState({});
+
+  const validateField = (name) => {
+    const fieldRules = rules[name] || [];
+    const value = values[name]?.value || "";
+
+    for (const rule of fieldRules) {
+      if (!rule.validate(value)) {
+        setFieldError(name, rule.message);
+        return false;
+      }
+    }
+    setFieldError(name, null);
+    return true;
+  };
+
+  const handleSubmit = async (e) => {
+    e.preventDefault();
+    const allValid = Object.keys(rules).every(validateField);
+    if (allValid) await onSubmit(extractValues(values));
+  };
+
+  return (
+    <FormContext.Provider value={{ values, validateField, ... }}>
+      <form onSubmit={handleSubmit} noValidate>
+        {children}
+      </form>
+    </FormContext.Provider>
+  );
+}
+
+function FormField({ name, label, rules = [], ...inputProps }) {
+  const { values, setFieldValue, validateField } = useFormContext();
+  const field = values[name] || { value: "", error: null, touched: false };
+  const showError = field.touched && field.error;
+
+  // Register rules on mount
+  useEffect(() => registerField(name, rules), []);
+
+  return (
+    <div>
+      <label htmlFor={inputId}>{label}</label>
+      <input
+        id={inputId}
+        value={field.value}
+        onChange={(e) => setFieldValue(name, e.target.value)}
+        onBlur={() => {
+          setFieldTouched(name);
+          validateField(name); // Validate on blur
+        }}
+        aria-invalid={showError ? "true" : undefined}
+        aria-describedby={showError ? errorId : undefined}
+        {...inputProps}
+      />
+      {showError && (
+        <p id={errorId} role="alert" className="text-red-600">
+          {field.error}
+        </p>
+      )}
+    </div>
+  );
+}
+
+function SubmitButton({ children }) {
+  const { isSubmitting } = useFormContext();
+  return (
+    <button type="submit" disabled={isSubmitting}>
+      {isSubmitting ? <Spinner /> : children}
+    </button>
+  );
+}`;
+
 export function FormDemo() {
   const [submittedData, setSubmittedData] = useState<Record<
     string,
@@ -20,6 +117,7 @@ export function FormDemo() {
     <DemoCard
       title="Form Validation"
       description="Client-side validation with accessible error messages. Validates on blur and submit."
+      sourceFiles={[{ filename: "components/ui/Form.tsx", code: formSource }]}
     >
       <div className="space-y-6">
         <Form onSubmit={handleSubmit} className="space-y-4">
