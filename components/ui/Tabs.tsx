@@ -149,7 +149,7 @@ function TabsList({
       aria-label={ariaLabel}
       onKeyDown={handleKeyDown}
       className={cn(
-        "flex border-b border-gray-200",
+        "flex border-b border-gray-200 dark:border-gray-700",
         className
       )}
     >
@@ -197,10 +197,10 @@ function Tab({ value, children, className, disabled = false }: TabProps) {
       className={cn(
         "px-4 py-2 text-sm font-medium transition-colors",
         "border-b-2 -mb-px",
-        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2",
+        "focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-800",
         isActive
-          ? "border-blue-500 text-blue-600"
-          : "border-transparent text-gray-500 hover:text-gray-700 hover:border-gray-300",
+          ? "border-blue-500 text-blue-600 dark:text-blue-400"
+          : "border-transparent text-gray-500 dark:text-gray-400 hover:text-gray-700 dark:hover:text-gray-300 hover:border-gray-300 dark:hover:border-gray-600",
         disabled && "opacity-50 cursor-not-allowed",
         className
       )}

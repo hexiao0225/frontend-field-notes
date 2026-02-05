@@ -5,3 +5,5 @@ export { Modal } from "./Modal";
 export { ToastProvider, useToast, useToastActions } from "./Toast";
 export { Form, validators } from "./Form";
 export { CodeBlock } from "./CodeBlock";
+export { ThemeProvider, useTheme } from "./ThemeProvider";
+export { ThemeToggle } from "./ThemeToggle";

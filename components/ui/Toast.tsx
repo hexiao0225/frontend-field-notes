@@ -165,24 +165,24 @@ function ToastContainer() {
 
 const typeStyles: Record<ToastType, { bg: string; icon: string; iconColor: string }> = {
   info: {
-    bg: "bg-blue-50 border-blue-200",
+    bg: "bg-blue-50 dark:bg-blue-900/30 border-blue-200 dark:border-blue-800",
     icon: "ℹ",
-    iconColor: "text-blue-500",
+    iconColor: "text-blue-500 dark:text-blue-400",
   },
   success: {
-    bg: "bg-green-50 border-green-200",
+    bg: "bg-green-50 dark:bg-green-900/30 border-green-200 dark:border-green-800",
     icon: "✓",
-    iconColor: "text-green-500",
+    iconColor: "text-green-500 dark:text-green-400",
   },
   warning: {
-    bg: "bg-yellow-50 border-yellow-200",
+    bg: "bg-yellow-50 dark:bg-yellow-900/30 border-yellow-200 dark:border-yellow-800",
     icon: "⚠",
-    iconColor: "text-yellow-500",
+    iconColor: "text-yellow-500 dark:text-yellow-400",
   },
   error: {
-    bg: "bg-red-50 border-red-200",
+    bg: "bg-red-50 dark:bg-red-900/30 border-red-200 dark:border-red-800",
     icon: "✕",
-    iconColor: "text-red-500",
+    iconColor: "text-red-500 dark:text-red-400",
   },
 };
 
@@ -261,17 +261,17 @@ function ToastItem({ toast }: ToastItemProps) {
         {icon}
       </span>
       <div className="flex-1 min-w-0">
-        <p className="text-sm font-medium text-gray-900">{toast.title}</p>
+        <p className="text-sm font-medium text-gray-900 dark:text-gray-100">{toast.title}</p>
         {toast.description && (
-          <p className="mt-1 text-sm text-gray-500">{toast.description}</p>
+          <p className="mt-1 text-sm text-gray-500 dark:text-gray-400">{toast.description}</p>
         )}
       </div>
       <button
         type="button"
         onClick={handleClose}
         className={cn(
-          "flex-shrink-0 p-1 rounded text-gray-400",
-          "hover:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
+          "flex-shrink-0 p-1 rounded text-gray-400 dark:text-gray-500",
+          "hover:text-gray-500 dark:hover:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500"
         )}
         aria-label="Dismiss"
       >

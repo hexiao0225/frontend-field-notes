@@ -159,8 +159,8 @@ function DropdownTrigger({ children, className }: DropdownTriggerProps) {
       className={cn(
         "inline-flex items-center justify-center gap-2 px-4 py-2",
         "text-sm font-medium rounded-md",
-        "bg-white border border-gray-300 shadow-sm",
-        "hover:bg-gray-50 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
+        "bg-white dark:bg-gray-800 border border-gray-300 dark:border-gray-600 shadow-sm",
+        "hover:bg-gray-50 dark:hover:bg-gray-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
         className
       )}
     >
@@ -276,7 +276,7 @@ function DropdownMenu({ children, className }: DropdownMenuProps) {
       onKeyDown={handleKeyDown}
       className={cn(
         "absolute z-50 mt-1 min-w-[160px] py-1",
-        "bg-white rounded-md shadow-lg border border-gray-200",
+        "bg-white dark:bg-gray-800 rounded-md shadow-lg border border-gray-200 dark:border-gray-700",
         "animate-fade-in",
         className
       )}
@@ -344,10 +344,10 @@ function DropdownItem({
       className={cn(
         "w-full px-4 py-2 text-left text-sm",
         "focus:outline-none",
-        isActive && "bg-gray-100",
+        isActive && "bg-gray-100 dark:bg-gray-700",
         disabled
-          ? "text-gray-400 cursor-not-allowed"
-          : "text-gray-700 hover:bg-gray-100",
+          ? "text-gray-400 dark:text-gray-500 cursor-not-allowed"
+          : "text-gray-700 dark:text-gray-200 hover:bg-gray-100 dark:hover:bg-gray-700",
         className
       )}
     >
@@ -364,7 +364,7 @@ function DropdownSeparator({ className }: { className?: string }) {
   return (
     <div
       role="separator"
-      className={cn("my-1 h-px bg-gray-200", className)}
+      className={cn("my-1 h-px bg-gray-200 dark:bg-gray-700", className)}
     />
   );
 }

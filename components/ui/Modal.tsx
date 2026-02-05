@@ -253,7 +253,7 @@ function ModalContent({
         className={cn(
           "fixed left-1/2 top-1/2 z-50",
           "w-full max-w-lg max-h-[85vh] overflow-auto",
-          "bg-white rounded-lg shadow-xl p-6",
+          "bg-white dark:bg-gray-800 rounded-lg shadow-xl p-6",
           "-translate-x-1/2 -translate-y-1/2",
           "animate-content-show",
           className
@@ -284,7 +284,7 @@ function ModalTitle({ children, className }: ModalTitleProps) {
   return (
     <h2
       id={titleId}
-      className={cn("text-lg font-semibold text-gray-900", className)}
+      className={cn("text-lg font-semibold text-gray-900 dark:text-white", className)}
     >
       {children}
     </h2>
@@ -305,7 +305,7 @@ function ModalDescription({ children, className }: ModalDescriptionProps) {
   return (
     <p
       id={descriptionId}
-      className={cn("mt-2 text-sm text-gray-500", className)}
+      className={cn("mt-2 text-sm text-gray-500 dark:text-gray-400", className)}
     >
       {children}
     </p>
@@ -334,8 +334,8 @@ function ModalClose({ children, className }: ModalCloseProps) {
       onClick={() => setIsOpen(false)}
       className={cn(
         "absolute right-4 top-4",
-        "p-1 rounded-sm text-gray-400",
-        "hover:text-gray-500 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
+        "p-1 rounded-sm text-gray-400 dark:text-gray-500",
+        "hover:text-gray-500 dark:hover:text-gray-400 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500",
         className
       )}
       aria-label="Close"

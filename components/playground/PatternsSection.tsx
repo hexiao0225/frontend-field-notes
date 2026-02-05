@@ -344,17 +344,17 @@ export function PatternsSection() {
 
   return (
     <>
-      <section className="mb-8 p-4 bg-white rounded-lg border border-gray-200">
-        <h2 className="text-sm font-semibold text-gray-900 mb-3">
+      <section className="mb-8 p-4 bg-white dark:bg-gray-800 rounded-lg border border-gray-200 dark:border-gray-700 transition-colors">
+        <h2 className="text-sm font-semibold text-gray-900 dark:text-white mb-3">
           Patterns Used{" "}
-          <span className="font-normal text-gray-500">(click to learn)</span>
+          <span className="font-normal text-gray-500 dark:text-gray-400">(click to learn)</span>
         </h2>
         <div className="flex flex-wrap gap-2">
           {patterns.map((pattern) => (
             <button
               key={pattern.name}
               onClick={() => setSelectedPattern(pattern)}
-              className="px-2 py-1 text-xs font-medium bg-blue-50 text-blue-700 rounded-full hover:bg-blue-100 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="px-2 py-1 text-xs font-medium bg-blue-50 dark:bg-blue-900/30 text-blue-700 dark:text-blue-300 rounded-full hover:bg-blue-100 dark:hover:bg-blue-900/50 transition-colors focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-800"
             >
               {pattern.name}
             </button>
@@ -375,15 +375,15 @@ export function PatternsSection() {
           <div className="mt-4 flex-1 overflow-y-auto space-y-4">
             {/* Why section */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-1">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-1">
                 Why use it?
               </h3>
-              <p className="text-sm text-gray-600">{selectedPattern?.why}</p>
+              <p className="text-sm text-gray-600 dark:text-gray-300">{selectedPattern?.why}</p>
             </div>
 
             {/* Code example */}
             <div>
-              <h3 className="text-sm font-semibold text-gray-900 mb-2">
+              <h3 className="text-sm font-semibold text-gray-900 dark:text-white mb-2">
                 Example from this project
               </h3>
               {selectedPattern && (
@@ -400,7 +400,7 @@ export function PatternsSection() {
           <Modal.Footer>
             <button
               onClick={() => setSelectedPattern(null)}
-              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2"
+              className="px-4 py-2 text-sm font-medium text-white bg-blue-600 rounded-md hover:bg-blue-700 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 focus-visible:ring-offset-2 dark:focus-visible:ring-offset-gray-800"
             >
               Got it
             </button>

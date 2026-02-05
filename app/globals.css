@@ -15,16 +15,23 @@
 
   body {
     @apply bg-gray-50 text-gray-900 antialiased;
+    @apply dark:bg-gray-900 dark:text-gray-100;
   }
 
   /* Focus visible styles for keyboard navigation */
   :focus-visible {
     @apply outline-none ring-2 ring-blue-500 ring-offset-2;
+    @apply dark:ring-offset-gray-900;
   }
 
   /* Remove focus ring for mouse users */
   :focus:not(:focus-visible) {
     @apply outline-none ring-0;
+  }
+
+  /* Smooth theme transitions */
+  html {
+    transition: background-color 0.2s ease, color 0.2s ease;
   }
 }
 

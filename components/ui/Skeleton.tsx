@@ -22,7 +22,7 @@ function Skeleton({ className, width, height }: SkeletonProps) {
     <div
       aria-hidden="true"
       className={cn(
-        "bg-gray-200 rounded",
+        "bg-gray-200 dark:bg-gray-700 rounded",
         !prefersReducedMotion && "animate-pulse",
         className
       )}
